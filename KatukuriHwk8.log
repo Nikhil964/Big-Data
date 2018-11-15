@@ -1,0 +1,378 @@
+Script started on Sat 10 Nov 2018 06:06:39 PM PST
+]0;katukun@comet-ln2:~[?1034h[katukun@comet-ln2 ~]$ ssh comet-07-17
+Rocks Compute Node
+Rocks 6.2 (SideWinder)
+Profile built 20:56 08-Feb-2016
+
+Kickstarted 21:26 08-Feb-2016
+                                                                       
+                      WELCOME TO 
+      __________________  __  _______________
+        -----/ ____/ __ \/  |/  / ____/_  __/
+          --/ /   / / / / /|_/ / __/   / /
+           / /___/ /_/ / /  / / /___  / /
+           \____/\____/_/  /_/_____/ /_/
+
+]0;katukun@comet-07-17:~[?1034h[katukun@comet-07-17 ~]$ start-master.sh
+starting org.apache.spark.deploy.master.Master, logging to /home/katukun/spark/logs/spark-katukun-org.apache.spark.deploy.master.Master-1-comet-07-17.sdsc.edu.out
+]0;katukun@comet-07-17:~[katukun@comet-07-17 ~]$ start slaves.sh
+start: Unknown job: slaves.sh
+]0;katukun@comet-07-17:~[katukun@comet-07-17 ~]$ start-slaves.sh
+comet-07-21: starting org.apache.spark.deploy.worker.Worker, logging to /home/katukun/spark/logs/spark-katukun-org.apache.spark.deploy.worker.Worker-1-comet-07-21.sdsc.edu.out
+comet-07-30: starting org.apache.spark.deploy.worker.Worker, logging to /home/katukun/spark/logs/spark-katukun-org.apache.spark.deploy.worker.Worker-1-comet-07-30.sdsc.edu.out
+]0;katukun@comet-07-17:~[katukun@comet-07-17 ~]$ spark-shell --packages com.databricks:spark-xml_2.11:0.4.1 --master spark://comet-17-10.sdsc.edu:7077 --driver-memory 120G --executor-memory 120G[1P[1P[1P[1P[1P[1@0[1@7[1@-[1@1[1@7
+Ivy Default Cache set to: /home/katukun/.ivy2/cache
+The jars for the packages stored in: /home/katukun/.ivy2/jars
+:: loading settings :: url = jar:file:/home/katukun/spark/jars/ivy-2.4.0.jar!/org/apache/ivy/core/settings/ivysettings.xml
+com.databricks#spark-xml_2.11 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-215a02a2-33b2-479c-b1ff-1b827c359308;1.0
+	confs: [default]
+	found com.databricks#spark-xml_2.11;0.4.1 in central
+:: resolution report :: resolve 213ms :: artifacts dl 3ms
+	:: modules in use:
+	com.databricks#spark-xml_2.11;0.4.1 from central in [default]
+	---------------------------------------------------------------------
+	|                  |            modules            ||   artifacts   |
+	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+	---------------------------------------------------------------------
+	|      default     |   1   |   0   |   0   |   0   ||   1   |   0   |
+	---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-215a02a2-33b2-479c-b1ff-1b827c359308
+	confs: [default]
+	0 artifacts copied, 1 already retrieved (0kB/5ms)
+2018-11-10 18:08:20 WARN  NativeCodeLoader:62 - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+Spark context Web UI available at http://comet-07-17.sdsc.edu:4040
+Spark context available as 'sc' (master = spark://comet-07-17.sdsc.edu:7077, app id = app-20181110180826-0000).
+Spark session available as 'spark'.
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 2.3.1
+      /_/
+         
+Using Scala version 2.11.8 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_60)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> sc
+res0: org.apache.spark.SparkContext = org.apache.spark.SparkContext@5256fbc
+
+scala> spark
+res1: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@113d0f75
+
+scala> val wikiDF = spark.read.format("com.databricks.spark.xml").option("rowTag", "page").load("wikipedia/enwikipedia.xml")
+[Stage 0:>                                                       (0 + 48) / 261][Stage 0:====>                                                  (22 + 48) / 261][Stage 0:====>                                                  (23 + 48) / 261][Stage 0:====>                                                  (23 + 49) / 261][Stage 0:=====>                                                 (24 + 48) / 261][Stage 0:==========>                                            (48 + 48) / 261][Stage 0:==========>                                            (49 + 48) / 261][Stage 0:===========>                                           (54 + 48) / 261][Stage 0:==============>                                        (67 + 48) / 261][Stage 0:==============>                                        (68 + 48) / 261][Stage 0:==============>                                        (69 + 48) / 261][Stage 0:==============>                                        (70 + 48) / 261][Stage 0:===============>                                       (72 + 48) / 261][Stage 0:===============>                                       (73 + 48) / 261][Stage 0:==================>                                    (88 + 48) / 261][Stage 0:===================>                                   (94 + 48) / 261][Stage 0:====================>                                  (95 + 48) / 261][Stage 0:====================>                                  (96 + 48) / 261][Stage 0:====================>                                 (101 + 48) / 261][Stage 0:======================>                               (109 + 48) / 261][Stage 0:=======================>                              (113 + 48) / 261][Stage 0:=======================>                              (115 + 48) / 261][Stage 0:========================>                             (116 + 48) / 261][Stage 0:========================>                             (117 + 48) / 261][Stage 0:========================>                             (119 + 48) / 261][Stage 0:========================>                             (120 + 48) / 261][Stage 0:=========================>                            (122 + 48) / 261][Stage 0:==========================>                           (127 + 48) / 261][Stage 0:===========================>                          (131 + 48) / 261][Stage 0:===========================>                          (132 + 48) / 261][Stage 0:===========================>                          (133 + 48) / 261][Stage 0:============================>                         (140 + 48) / 261][Stage 0:=============================>                        (141 + 48) / 261][Stage 0:=============================>                        (142 + 48) / 261][Stage 0:=============================>                        (143 + 48) / 261][Stage 0:=============================>                        (144 + 48) / 261][Stage 0:==============================>                       (145 + 48) / 261][Stage 0:==============================>                       (146 + 48) / 261][Stage 0:==============================>                       (149 + 48) / 261][Stage 0:================================>                     (155 + 48) / 261][Stage 0:================================>                     (157 + 48) / 261][Stage 0:================================>                     (159 + 48) / 261][Stage 0:=================================>                    (160 + 48) / 261][Stage 0:=================================>                    (162 + 48) / 261][Stage 0:=================================>                    (163 + 48) / 261][Stage 0:=================================>                    (164 + 48) / 261][Stage 0:==================================>                   (165 + 48) / 261][Stage 0:==================================>                   (166 + 48) / 261][Stage 0:==================================>                   (169 + 48) / 261][Stage 0:===================================>                  (170 + 48) / 261][Stage 0:===================================>                  (173 + 48) / 261][Stage 0:====================================>                 (174 + 48) / 261][Stage 0:=====================================>                (182 + 48) / 261][Stage 0:======================================>               (188 + 48) / 261][Stage 0:=======================================>              (190 + 48) / 261][Stage 0:=======================================>              (191 + 48) / 261][Stage 0:=======================================>              (192 + 48) / 261][Stage 0:=======================================>              (193 + 48) / 261][Stage 0:========================================>             (194 + 48) / 261][Stage 0:========================================>             (196 + 48) / 261][Stage 0:========================================>             (198 + 48) / 261][Stage 0:=========================================>            (200 + 48) / 261][Stage 0:==========================================>           (205 + 48) / 261][Stage 0:==========================================>           (206 + 48) / 261][Stage 0:==========================================>           (207 + 48) / 261][Stage 0:===========================================>          (208 + 48) / 261][Stage 0:===========================================>          (209 + 48) / 261][Stage 0:===========================================>          (210 + 48) / 261][Stage 0:===========================================>          (211 + 48) / 261][Stage 0:===========================================>          (212 + 48) / 261][Stage 0:============================================>         (214 + 47) / 261][Stage 0:============================================>         (215 + 46) / 261][Stage 0:============================================>         (216 + 45) / 261][Stage 0:============================================>         (217 + 44) / 261][Stage 0:=============================================>        (218 + 43) / 261][Stage 0:=============================================>        (222 + 39) / 261][Stage 0:==============================================>       (226 + 35) / 261][Stage 0:================================================>     (232 + 29) / 261][Stage 0:================================================>     (234 + 27) / 261][Stage 0:=================================================>    (239 + 22) / 261][Stage 0:=================================================>    (240 + 21) / 261][Stage 0:=================================================>    (241 + 20) / 261][Stage 0:==================================================>   (245 + 16) / 261][Stage 0:==================================================>   (246 + 15) / 261][Stage 0:=====================================================> (252 + 9) / 261][Stage 0:=====================================================> (254 + 7) / 261][Stage 0:=====================================================> (255 + 6) / 261][Stage 0:=====================================================> (256 + 5) / 261][Stage 0:======================================================>(257 + 4) / 261][Stage 0:======================================================>(258 + 3) / 261]                                                                                2018-11-10 18:10:13 WARN  ObjectStore:568 - Failed to get database global_temp, returning NoSuchObjectException
+wikiDF: org.apache.spark.sql.DataFrame = [id: bigint, ns: bigint ... 4 more fields]
+
+scala> wikiDF.printSchema
+root
+ |-- id: long (nullable = true)
+ |-- ns: long (nullable = true)
+ |-- redirect: struct (nullable = true)
+ |    |-- _VALUE: string (nullable = true)
+ |    |-- _title: string (nullable = true)
+ |-- restrictions: string (nullable = true)
+ |-- revision: struct (nullable = true)
+ |    |-- comment: string (nullable = true)
+ |    |-- contributor: struct (nullable = true)
+ |    |    |-- id: long (nullable = true)
+ |    |    |-- ip: string (nullable = true)
+ |    |    |-- username: string (nullable = true)
+ |    |-- format: string (nullable = true)
+ |    |-- id: long (nullable = true)
+ |    |-- minor: string (nullable = true)
+ |    |-- model: string (nullable = true)
+ |    |-- parentid: long (nullable = true)
+ |    |-- sha1: string (nullable = true)
+ |    |-- text: struct (nullable = true)
+ |    |    |-- _VALUE: string (nullable = true)
+ |    |    |-- _space: string (nullable = true)
+ |    |-- timestamp: string (nullable = true)
+ |-- title: string (nullable = true)
+
+
+scala> val titleDF = wikiDF.select("title")
+titleDF: org.apache.spark.sql.DataFrame = [title: string]
+
+scala> titleDF.count()
+[Stage 2:>                                                       (0 + 48) / 261][Stage 2:=========>                                             (45 + 48) / 261][Stage 2:==========>                                            (48 + 48) / 261][Stage 2:==========>                                            (49 + 48) / 261][Stage 2:==============>                                        (70 + 48) / 261][Stage 2:===================>                                   (91 + 48) / 261][Stage 2:====================>                                  (95 + 48) / 261][Stage 2:====================>                                  (96 + 48) / 261][Stage 2:====================>                                  (97 + 48) / 261][Stage 2:=====================>                                (103 + 48) / 261][Stage 2:==========================>                           (128 + 48) / 261][Stage 2:============================>                         (139 + 48) / 261][Stage 2:=============================>                        (141 + 48) / 261][Stage 2:=============================>                        (143 + 48) / 261][Stage 2:=============================>                        (144 + 48) / 261][Stage 2:==============================>                       (146 + 48) / 261][Stage 2:===============================>                      (153 + 48) / 261][Stage 2:=================================>                    (163 + 48) / 261][Stage 2:=====================================>                (181 + 48) / 261][Stage 2:======================================>               (188 + 48) / 261][Stage 2:=======================================>              (191 + 48) / 261][Stage 2:=======================================>              (192 + 48) / 261][Stage 2:=======================================>              (193 + 48) / 261][Stage 2:========================================>             (195 + 48) / 261][Stage 2:=========================================>            (202 + 48) / 261][Stage 2:===========================================>          (209 + 49) / 261][Stage 2:==============================================>       (223 + 38) / 261][Stage 2:===============================================>      (230 + 31) / 261][Stage 2:=================================================>    (237 + 24) / 261][Stage 2:=================================================>    (240 + 21) / 261][Stage 2:==================================================>   (242 + 19) / 261][Stage 2:==================================================>   (246 + 15) / 261][Stage 2:=====================================================> (252 + 9) / 261][Stage 2:=====================================================> (254 + 7) / 261][Stage 2:======================================================>(260 + 1) / 261]                                                                                res3: Long = 2342456
+
+scala> import org.apache.spark.ml.feature.Tokenizer
+import org.apache.spark.ml.feature.Tokenizer
+
+scala> val token = new Tokenizer()
+token: org.apache.spark.ml.feature.Tokenizer = tok_06567e7a84da
+
+scala> val tokenisedData = token.setInputCol("title").setOutputCol("words").transform(titleDF)
+tokenisedData: org.apache.spark.sql.DataFrame = [title: string, words: array<string>]
+
+scala> tokenisedData.show
+[Stage 4:>                                                          (0 + 1) / 1]                                                                                +--------------------+--------------------+
+|               title|               words|
++--------------------+--------------------+
+|  Gettysburg Address|[gettysburg, addr...|
+|           Main Page|        [main, page]|
+|Declaration by Un...|[declaration, by,...|
+|Constitution of t...|[constitution, of...|
+|Declaration of In...|[declaration, of,...|
+|Rewards and Fairi...|[rewards, and, fa...|
+|Wikisource:Script...|[wikisource:scrip...|
+|September 14, 200...|[september, 14,, ...|
+|Ryan White's Test...|[ryan, white's, t...|
+|United States Dec...|[united, states, ...|
+|    Atlantic Charter| [atlantic, charter]|
+|Universal Declara...|[universal, decla...|
+|   Optimism (Keller)|[optimism, (keller)]|
+|          Kubla Khan|       [kubla, khan]|
+|Aesthetic Papers/...|[aesthetic, paper...|
+|Essays: First Ser...|[essays:, first, ...|
+|Unto This Last (R...|[unto, this, last...|
+| A Letter to a Hindu|[a, letter, to, a...|
+| Author:Robert Frost|[author:robert, f...|
+|E.S. Dargan on Se...|[e.s., dargan, on...|
++--------------------+--------------------+
+only showing top 20 rows
+
+
+scala> import org.apache.spark.ml.feature.StopWordsRemover
+import org.apache.spark.ml.feature.StopWordsRemover
+
+scala> val stopWords = StopWordsRemover.loadDefaultStopWords("english")
+stopWords: Array[String] = Array(i, me, my, myself, we, our, ours, ourselves, you, your, yours, yourself, yourselves, he, him, his, himself, she, her, hers, herself, it, its, itself, they, them, their, theirs, themselves, what, which, who, whom, this, that, these, those, am, is, are, was, were, be, been, being, have, has, had, having, do, does, did, doing, a, an, the, and, but, if, or, because, as, until, while, of, at, by, for, with, about, against, between, into, through, during, before, after, above, below, to, from, up, down, in, out, on, off, over, under, again, further, then, once, here, there, when, where, why, how, all, any, both, each, few, more, most, other, some, such, no, nor, not, only, own, same, so, than, too, very, s, t, can, will, just, don, should, now, i'll, you'll, h...
+scala> val stopWords = new StopWordsRemover()
+stopWords: org.apache.spark.ml.feature.StopWordsRemover = stopWords_0520c18b7270
+
+scala> val removedStopWords = stopWords.setInputCol("words").setOutputCol("RemovedStopWords").transform(tokenisedData)
+removedStopWords: org.apache.spark.sql.DataFrame = [title: string, words: array<string> ... 1 more field]
+
+scala> removedStopWords.show
+[Stage 5:>                                                          (0 + 1) / 1]                                                                                +--------------------+--------------------+--------------------+
+|               title|               words|    RemovedStopWords|
++--------------------+--------------------+--------------------+
+|  Gettysburg Address|[gettysburg, addr...|[gettysburg, addr...|
+|           Main Page|        [main, page]|        [main, page]|
+|Declaration by Un...|[declaration, by,...|[declaration, uni...|
+|Constitution of t...|[constitution, of...|[constitution, un...|
+|Declaration of In...|[declaration, of,...|[declaration, ind...|
+|Rewards and Fairi...|[rewards, and, fa...|[rewards, fairies...|
+|Wikisource:Script...|[wikisource:scrip...|[wikisource:scrip...|
+|September 14, 200...|[september, 14,, ...|[september, 14,, ...|
+|Ryan White's Test...|[ryan, white's, t...|[ryan, white's, t...|
+|United States Dec...|[united, states, ...|[united, states, ...|
+|    Atlantic Charter| [atlantic, charter]| [atlantic, charter]|
+|Universal Declara...|[universal, decla...|[universal, decla...|
+|   Optimism (Keller)|[optimism, (keller)]|[optimism, (keller)]|
+|          Kubla Khan|       [kubla, khan]|       [kubla, khan]|
+|Aesthetic Papers/...|[aesthetic, paper...|[aesthetic, paper...|
+|Essays: First Ser...|[essays:, first, ...|[essays:, first, ...|
+|Unto This Last (R...|[unto, this, last...|[unto, last, (rus...|
+| A Letter to a Hindu|[a, letter, to, a...|     [letter, hindu]|
+| Author:Robert Frost|[author:robert, f...|[author:robert, f...|
+|E.S. Dargan on Se...|[e.s., dargan, on...|[e.s., dargan, se...|
++--------------------+--------------------+--------------------+
+only showing top 20 rows
+
+
+scala> import org.apache.spark.ml.feature.{HashingTF, IDF}
+import org.apache.spark.ml.feature.{HashingTF, IDF}
+
+scala> val hashing = new HashingTF()
+hashing: org.apache.spark.ml.feature.HashingTF = hashingTF_7fc502b39e33
+
+scala> val hashingDF = hashing.setNumFeatures(10000).setInputCol("RemovedStopWords").setOutputCol("rawFeatures").transform(removedStopWords)
+hashingDF: org.apache.spark.sql.DataFrame = [title: string, words: array<string> ... 2 more fields]
+
+scala> hashingDF.show
+[Stage 6:>                                                          (0 + 1) / 1]                                                                                +--------------------+--------------------+--------------------+--------------------+
+|               title|               words|    RemovedStopWords|         rawFeatures|
++--------------------+--------------------+--------------------+--------------------+
+|  Gettysburg Address|[gettysburg, addr...|[gettysburg, addr...|(10000,[1996,3417...|
+|           Main Page|        [main, page]|        [main, page]|(10000,[1637,2827...|
+|Declaration by Un...|[declaration, by,...|[declaration, uni...|(10000,[396,8254,...|
+|Constitution of t...|[constitution, of...|[constitution, un...|(10000,[3222,5044...|
+|Declaration of In...|[declaration, of,...|[declaration, ind...|(10000,[5377,6412...|
+|Rewards and Fairi...|[rewards, and, fa...|[rewards, fairies...|(10000,[3,9933],[...|
+|Wikisource:Script...|[wikisource:scrip...|[wikisource:scrip...|(10000,[2415],[1.0])|
+|September 14, 200...|[september, 14,, ...|[september, 14,, ...|(10000,[879,3247,...|
+|Ryan White's Test...|[ryan, white's, t...|[ryan, white's, t...|(10000,[2273,2429...|
+|United States Dec...|[united, states, ...|[united, states, ...|(10000,[4314,5377...|
+|    Atlantic Charter| [atlantic, charter]| [atlantic, charter]|(10000,[1752,2443...|
+|Universal Declara...|[universal, decla...|[universal, decla...|(10000,[172,7817,...|
+|   Optimism (Keller)|[optimism, (keller)]|[optimism, (keller)]|(10000,[4584,5697...|
+|          Kubla Khan|       [kubla, khan]|       [kubla, khan]|(10000,[416,7328]...|
+|Aesthetic Papers/...|[aesthetic, paper...|[aesthetic, paper...|(10000,[4970,7820...|
+|Essays: First Ser...|[essays:, first, ...|[essays:, first, ...|(10000,[3183,4185...|
+|Unto This Last (R...|[unto, this, last...|[unto, last, (rus...|(10000,[3405,3989...|
+| A Letter to a Hindu|[a, letter, to, a...|     [letter, hindu]|(10000,[456,2918]...|
+| Author:Robert Frost|[author:robert, f...|[author:robert, f...|(10000,[3806,6712...|
+|E.S. Dargan on Se...|[e.s., dargan, on...|[e.s., dargan, se...|(10000,[2439,4504...|
++--------------------+--------------------+--------------------+--------------------+
+only showing top 20 rows
+
+
+scala> val IDF = new IDF().setInputCol("rawFeatures").setOutputCol("features")
+IDF: org.apache.spark.ml.feature.IDF = idf_d38181afeac2
+
+scala> val IDFmodel = IDF.fit(hashingDF)
+[Stage 7:>                                                       (0 + 48) / 261][Stage 7:=====>                                                 (25 + 48) / 261][Stage 7:========>                                              (41 + 48) / 261][Stage 7:=========>                                             (47 + 48) / 261][Stage 7:==========>                                            (48 + 48) / 261][Stage 7:==========>                                            (49 + 48) / 261][Stage 7:============>                                          (58 + 48) / 261][Stage 7:============>                                          (60 + 48) / 261][Stage 7:=============>                                         (66 + 48) / 261][Stage 7:==============>                                        (68 + 48) / 261][Stage 7:===============>                                       (72 + 48) / 261][Stage 7:===============>                                       (73 + 48) / 261][Stage 7:================>                                      (76 + 48) / 261][Stage 7:================>                                      (77 + 48) / 261][Stage 7:================>                                      (79 + 48) / 261][Stage 7:==================>                                    (86 + 48) / 261][Stage 7:===================>                                   (91 + 48) / 261][Stage 7:===================>                                   (92 + 48) / 261][Stage 7:====================>                                  (96 + 48) / 261][Stage 7:====================>                                  (98 + 48) / 261][Stage 7:====================>                                  (99 + 48) / 261][Stage 7:====================>                                 (100 + 48) / 261][Stage 7:====================>                                 (101 + 48) / 261][Stage 7:=====================>                                (104 + 48) / 261][Stage 7:======================>                               (107 + 48) / 261][Stage 7:=======================>                              (113 + 48) / 261][Stage 7:=======================>                              (115 + 48) / 261][Stage 7:========================>                             (116 + 48) / 261][Stage 7:========================>                             (118 + 48) / 261][Stage 7:========================>                             (119 + 48) / 261][Stage 7:=========================>                            (121 + 48) / 261][Stage 7:=========================>                            (122 + 48) / 261][Stage 7:=========================>                            (123 + 48) / 261][Stage 7:==========================>                           (128 + 48) / 261][Stage 7:==========================>                           (129 + 48) / 261][Stage 7:===========================>                          (132 + 48) / 261][Stage 7:===========================>                          (134 + 48) / 261][Stage 7:============================>                         (138 + 48) / 261][Stage 7:=============================>                        (142 + 48) / 261][Stage 7:=============================>                        (143 + 48) / 261][Stage 7:=============================>                        (144 + 48) / 261][Stage 7:==============================>                       (145 + 48) / 261][Stage 7:==============================>                       (146 + 48) / 261][Stage 7:==============================>                       (147 + 48) / 261][Stage 7:===============================>                      (151 + 48) / 261][Stage 7:================================>                     (159 + 48) / 261][Stage 7:=================================>                    (160 + 48) / 261][Stage 7:=================================>                    (163 + 48) / 261][Stage 7:==================================>                   (168 + 48) / 261][Stage 7:===================================>                  (172 + 48) / 261][Stage 7:====================================>                 (176 + 48) / 261][Stage 7:====================================>                 (178 + 48) / 261][Stage 7:=====================================>                (179 + 48) / 261][Stage 7:=====================================>                (181 + 48) / 261][Stage 7:=====================================>                (182 + 48) / 261][Stage 7:======================================>               (184 + 48) / 261][Stage 7:=======================================>              (189 + 48) / 261][Stage 7:=======================================>              (191 + 48) / 261][Stage 7:=======================================>              (192 + 48) / 261][Stage 7:========================================>             (197 + 48) / 261][Stage 7:=========================================>            (199 + 48) / 261][Stage 7:=========================================>            (200 + 48) / 261][Stage 7:=========================================>            (202 + 48) / 261][Stage 7:==========================================>           (203 + 48) / 261][Stage 7:==========================================>           (206 + 48) / 261][Stage 7:===========================================>          (210 + 48) / 261][Stage 7:=============================================>        (218 + 43) / 261][Stage 7:==============================================>       (223 + 38) / 261][Stage 7:==============================================>       (227 + 34) / 261][Stage 7:===============================================>      (228 + 33) / 261][Stage 7:===============================================>      (229 + 32) / 261][Stage 7:================================================>     (233 + 28) / 261][Stage 7:=================================================>    (239 + 22) / 261][Stage 7:=================================================>    (241 + 20) / 261][Stage 7:==================================================>   (243 + 18) / 261][Stage 7:===================================================>  (248 + 13) / 261][Stage 7:=====================================================> (254 + 7) / 261][Stage 7:======================================================>(259 + 2) / 261][Stage 7:======================================================>(260 + 1) / 261]                                                                                IDFmodel: org.apache.spark.ml.feature.IDFModel = idf_d38181afeac2
+
+scala> val IDF_Data = IDFmodel.transform(hashingDF)
+IDF_Data: org.apache.spark.sql.DataFrame = [title: string, words: array<string> ... 3 more fields]
+
+scala> IDF_Data.show
+[Stage 9:>                                                          (0 + 1) / 1]                                                                                +--------------------+--------------------+--------------------+--------------------+--------------------+
+|               title|               words|    RemovedStopWords|         rawFeatures|            features|
++--------------------+--------------------+--------------------+--------------------+--------------------+
+|  Gettysburg Address|[gettysburg, addr...|[gettysburg, addr...|(10000,[1996,3417...|(10000,[1996,3417...|
+|           Main Page|        [main, page]|        [main, page]|(10000,[1637,2827...|(10000,[1637,2827...|
+|Declaration by Un...|[declaration, by,...|[declaration, uni...|(10000,[396,8254,...|(10000,[396,8254,...|
+|Constitution of t...|[constitution, of...|[constitution, un...|(10000,[3222,5044...|(10000,[3222,5044...|
+|Declaration of In...|[declaration, of,...|[declaration, ind...|(10000,[5377,6412...|(10000,[5377,6412...|
+|Rewards and Fairi...|[rewards, and, fa...|[rewards, fairies...|(10000,[3,9933],[...|(10000,[3,9933],[...|
+|Wikisource:Script...|[wikisource:scrip...|[wikisource:scrip...|(10000,[2415],[1.0])|(10000,[2415],[6....|
+|September 14, 200...|[september, 14,, ...|[september, 14,, ...|(10000,[879,3247,...|(10000,[879,3247,...|
+|Ryan White's Test...|[ryan, white's, t...|[ryan, white's, t...|(10000,[2273,2429...|(10000,[2273,2429...|
+|United States Dec...|[united, states, ...|[united, states, ...|(10000,[4314,5377...|(10000,[4314,5377...|
+|    Atlantic Charter| [atlantic, charter]| [atlantic, charter]|(10000,[1752,2443...|(10000,[1752,2443...|
+|Universal Declara...|[universal, decla...|[universal, decla...|(10000,[172,7817,...|(10000,[172,7817,...|
+|   Optimism (Keller)|[optimism, (keller)]|[optimism, (keller)]|(10000,[4584,5697...|(10000,[4584,5697...|
+|          Kubla Khan|       [kubla, khan]|       [kubla, khan]|(10000,[416,7328]...|(10000,[416,7328]...|
+|Aesthetic Papers/...|[aesthetic, paper...|[aesthetic, paper...|(10000,[4970,7820...|(10000,[4970,7820...|
+|Essays: First Ser...|[essays:, first, ...|[essays:, first, ...|(10000,[3183,4185...|(10000,[3183,4185...|
+|Unto This Last (R...|[unto, this, last...|[unto, last, (rus...|(10000,[3405,3989...|(10000,[3405,3989...|
+| A Letter to a Hindu|[a, letter, to, a...|     [letter, hindu]|(10000,[456,2918]...|(10000,[456,2918]...|
+| Author:Robert Frost|[author:robert, f...|[author:robert, f...|(10000,[3806,6712...|(10000,[3806,6712...|
+|E.S. Dargan on Se...|[e.s., dargan, on...|[e.s., dargan, se...|(10000,[2439,4504...|(10000,[2439,4504...|
++--------------------+--------------------+--------------------+--------------------+--------------------+
+only showing top 20 rows
+
+
+scala> val rawFeatures = IDF_Data.select("rawFeatures")
+rawFeatures: org.apache.spark.sql.DataFrame = [rawFeatures: vector]
+
+scala> rawFeatures.show(5)
+[Stage 10:>                                                         (0 + 1) / 1]                                                                                +--------------------+
+|         rawFeatures|
++--------------------+
+|(10000,[1996,3417...|
+|(10000,[1637,2827...|
+|(10000,[396,8254,...|
+|(10000,[3222,5044...|
+|(10000,[5377,6412...|
++--------------------+
+only showing top 5 rows
+
+
+scala> rawFeatures.take(5)
+[Stage 11:>                                                         (0 + 1) / 1]                                                                                res9: Array[org.apache.spark.sql.Row] = Array([(10000,[1996,3417],[1.0,1.0])], [(10000,[1637,2827],[1.0,1.0])], [(10000,[396,8254,8580],[1.0,1.0,1.0])], [(10000,[3222,5044,8254,8505],[1.0,1.0,1.0,1.0])], [(10000,[5377,6412,8580],[1.0,1.0,1.0])])
+
+scala> val features = IDF_Data.select("features")
+features: org.apache.spark.sql.DataFrame = [features: vector]
+
+scala> features.show(5)
+[Stage 12:>                                                         (0 + 1) / 1]                                                                                +--------------------+
+|            features|
++--------------------+
+|(10000,[1996,3417...|
+|(10000,[1637,2827...|
+|(10000,[396,8254,...|
+|(10000,[3222,5044...|
+|(10000,[5377,6412...|
++--------------------+
+only showing top 5 rows
+
+
+scala> features.take(5)
+[Stage 13:>                                                         (0 + 1) / 1]                                                                                res11: Array[org.apache.spark.sql.Row] = Array([(10000,[1996,3417],[6.479968149355937,8.772308102204605])], [(10000,[1637,2827],[8.648117721973222,7.2889520282415825])], [(10000,[396,8254,8580],[6.744087362252169,4.4783828448162035,8.154965606824728])], [(10000,[3222,5044,8254,8505],[6.344802968239032,6.514801063528551,4.4783828448162035,1.9446609600336886])], [(10000,[5377,6412,8580],[6.438267053465422,8.901519833684612,8.154965606824728])])
+
+scala> val booksDF = spark.read.format("com.databricks.spark.xml").option("rowTag", "book").load("books.xml")
+booksDF: org.apache.spark.sql.DataFrame = [_id: string, author: string ... 5 more fields]
+
+scala> booksDF.printSchema
+root
+ |-- _id: string (nullable = true)
+ |-- author: string (nullable = true)
+ |-- description: string (nullable = true)
+ |-- genre: string (nullable = true)
+ |-- price: double (nullable = true)
+ |-- publish_date: string (nullable = true)
+ |-- title: string (nullable = true)
+
+
+scala> val titleDescriptionDF = booksDF.select("title","description")
+titleDescriptionDF: org.apache.spark.sql.DataFrame = [title: string, description: string]
+
+scala> titleDescriptionDF.count()
+res13: Long = 12
+
+scala> val tokenDesc = token.setInputCol("description").setOutputCol("tokens").transform(titleDescriptionDF)
+tokenDesc: org.apache.spark.sql.DataFrame = [title: string, description: string ... 1 more field]
+
+scala> val removeStopWords = stopWords.setInputCol("tokens").setOutputCol("RemovedStopWords").transform(tokenDesc)
+removeStopWords: org.apache.spark.sql.DataFrame = [title: string, description: string ... 2 more fields]
+
+scala> removeStopWords.show
++--------------------+--------------------+--------------------+--------------------+
+|               title|         description|              tokens|    RemovedStopWords|
++--------------------+--------------------+--------------------+--------------------+
+|XML Developer's G...|
+
+
+         An in...|[, , , , , , , , ...|[, , , , , , , , ...|
+|       Midnight Rain|A former architec...|[a, former, archi...|[former, architec...|
+|     Maeve Ascendant|After the collaps...|[after, the, coll...|[collapse, nanote...|
+|     Oberon's Legacy|In post-apocalyps...|[in, post-apocaly...|[post-apocalypse,...|
+|  The Sundered Grail|The two daughters...|[the, two, daught...|[two, daughters, ...|
+|         Lover Birds|When Carla meets ...|[when, carla, mee...|[carla, meets, pa...|
+|       Splish Splash|A deep sea diver ...|[a, deep, sea, di...|[deep, sea, diver...|
+|     Creepy Crawlies|An anthology of h...|[an, anthology, o...|[anthology, horro...|
+|        Paradox Lost|After an inadvert...|[after, an, inadv...|[inadvertant, tri...|
+|Microsoft .NET: T...|Microsoft's .NET ...|[microsoft's, .ne...|[microsoft's, .ne...|
+|MSXML3: A Compreh...|The Microsoft MSX...|[the, microsoft, ...|[microsoft, msxml...|
+|Visual Studio 7: ...|Microsoft Visual ...|[microsoft, visua...|[microsoft, visua...|
++--------------------+--------------------+--------------------+--------------------+
+
+
+scala> import org.apache.spark.ml.feature.Word2Vec
+import org.apache.spark.ml.feature.Word2Vec
+
+scala> val word2Vec = new Word2Vec().setInputCol("RemovedStopWords").setOutputCol("word2Vec")
+word2Vec: org.apache.spark.ml.feature.Word2Vec = w2v_22b2bd325881
+
+scala> val word2Vec_Model = word2Vec.fit(removeStopWords)
+2018-11-10 19:18:10 WARN  BLAS:61 - Failed to load implementation from: com.github.fommil.netlib.NativeSystemBLAS
+2018-11-10 19:18:10 WARN  BLAS:61 - Failed to load implementation from: com.github.fommil.netlib.NativeRefBLAS
+word2Vec_Model: org.apache.spark.ml.feature.Word2VecModel = w2v_22b2bd325881
+
+scala> val word2Vec_Mode_Data =  word2Vec_Model.transform(removeStopWords)
+word2Vec_Mode_Data: org.apache.spark.sql.DataFrame = [title: string, description: string ... 3 more fields]
+
+scala> val featureVectors = word2Vec_Mode_Data.select("word2Vec")
+featureVectors: org.apache.spark.sql.DataFrame = [word2Vec: vector]
+
+scala> featureVectors.show(5)
++--------------------+
+|            word2Vec|
++--------------------+
+|[-0.0268133048718...|
+|[-0.0285542792081...|
+|[-0.0297440408418...|
+|[-0.0297440408418...|
+|[-0.0274560377001...|
++--------------------+
+only showing top 5 rows
+
+
+scala> featureVectors.take(5)
+res16: Array[org.apache.spark.sql.Row] = Array([[-0.02681330487181523,-0.13451084018215143,0.14665728347557308,-0.1651995653138224,-0.14946659286794936,0.11312024798079402,-0.13549104359297626,0.1012593991395119,-0.10564982504542686,0.1160744210309555,0.10529298452347254,-0.06634694063393151,-0.0538464472505503,0.14861441469561737,-0.0014566608465872127,-0.15757879837358418,-0.05191842917624894,0.03143896770548174,0.12693071014256077,-0.025396556710665714,-0.14358317669052464,0.15996988473740298,0.058971474804313834,0.0730115399094282,0.16220024457217844,0.06566212772169208,0.0922373978305707,0.15749961790521588,-0.11062105311558837,-0.04310152007975673,0.03875938812693153,0.057635340176160094,-0.019930013781001347,-0.04010147539552598,0.023239117718417097,-0.1731167101853453,0.14146082...
+scala> :q
+]0;katukun@comet-07-17:~[katukun@comet-07-17 ~]$ exit
+logout
+Connection to comet-07-17 closed.
+]0;katukun@comet-ln2:~[katukun@comet-ln2 ~]$ exit
+exit
+
+Script done on Sat 10 Nov 2018 07:20:59 PM PST
