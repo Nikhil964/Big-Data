@@ -1,0 +1,684 @@
+{
+  "metadata" : {
+    "id" : "a6aa2890-80fd-4880-98e4-6a17485778f6",
+    "name" : "KatukuriHwk7",
+    "user_save_timestamp" : "1969-12-31T19:00:00.000Z",
+    "auto_save_timestamp" : "1969-12-31T19:00:00.000Z",
+    "language_info" : {
+      "name" : "scala",
+      "file_extension" : "scala",
+      "codemirror_mode" : "text/x-scala"
+    },
+    "trusted" : true,
+    "sparkNotebook" : null,
+    "customLocalRepo" : null,
+    "customRepos" : null,
+    "customDeps" : null,
+    "customImports" : null,
+    "customArgs" : null,
+    "customSparkConf" : null,
+    "customVars" : null
+  },
+  "cells" : [ {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "C28D4FECF65B4109BD4AA53BDA252CBE"
+    },
+    "cell_type" : "code",
+    "source" : "val warehouseLocation = \"file:${system:user.dir}/spark-warehouse\"",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "warehouseLocation: String = file:${system:user.dir}/spark-warehouse\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 1,
+      "time" : "Took: 3.967s, at 2018-11-03 22:39"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "4D2CDEADC8734B3481A1B41C181BC8F7"
+    },
+    "cell_type" : "code",
+    "source" : "val spark = SparkSession\n   .builder()\n   .appName(\"ALS-Example\")\n   .config(\"spark.sql.warehouse.dir\", warehouseLocation)\n   .enableHiveSupport()\n   .getOrCreate()\n",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "spark: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@4adfc155\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 2,
+      "time" : "Took: 5.912s, at 2018-11-03 22:39"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "6037A962ED7440378F98E4950748E99F"
+    },
+    "cell_type" : "code",
+    "source" : "val moviesDF = spark.read.format(\"csv\").option(\"header\", \"true\").load(\"movies.csv\")",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "moviesDF: org.apache.spark.sql.DataFrame = [movieId: string, title: string ... 1 more field]\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 3,
+      "time" : "Took: 10.202s, at 2018-11-03 22:39"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "212D113231CE4D4EA9C56649CC09901C"
+    },
+    "cell_type" : "code",
+    "source" : "moviesDF.printSchema\n",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "root\n |-- movieId: string (nullable = true)\n |-- title: string (nullable = true)\n |-- genres: string (nullable = true)\n\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 4,
+      "time" : "Took: 3.637s, at 2018-11-03 22:39"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "DD3278140D5C42C09D722943AB989A83"
+    },
+    "cell_type" : "code",
+    "source" : "val moviesDF_1 = moviesDF.withColumn(\"movieId\",col(\"movieId\").cast(\"int\")).select(\"movieId\", \"title\", \"genres\")",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "moviesDF_1: org.apache.spark.sql.DataFrame = [movieId: int, title: string ... 1 more field]\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 5,
+      "time" : "Took: 3.124s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "7CA42ABC690A4B878F42199412E786BF"
+    },
+    "cell_type" : "code",
+    "source" : "moviesDF_1.printSchema",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "root\n |-- movieId: integer (nullable = true)\n |-- title: string (nullable = true)\n |-- genres: string (nullable = true)\n\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 6,
+      "time" : "Took: 3.249s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "09034266764445A39860395E86235DFA"
+    },
+    "cell_type" : "code",
+    "source" : "val ratingsDF = spark.read.format(\"csv\").option(\"header\", \"true\").load(\"ratings.csv\")",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "ratingsDF: org.apache.spark.sql.DataFrame = [userId: string, movieId: string ... 2 more fields]\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 7,
+      "time" : "Took: 2.686s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "CF1CA6427C424E5C828AAF8DABD0BE2E"
+    },
+    "cell_type" : "code",
+    "source" : "ratingsDF.printSchema",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "root\n |-- userId: string (nullable = true)\n |-- movieId: string (nullable = true)\n |-- rating: string (nullable = true)\n |-- timestamp: string (nullable = true)\n\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 8,
+      "time" : "Took: 3.092s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "A9FEC03CB10A4DA88F20F0B824E5EB8F"
+    },
+    "cell_type" : "code",
+    "source" : "val ratingsDF_1 = ratingsDF.withColumn(\"userId\",col(\"userId\").cast(\"integer\")).select(\"userId\", \"movieId\", \"rating\", \"timestamp\")",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "ratingsDF_1: org.apache.spark.sql.DataFrame = [userId: int, movieId: string ... 2 more fields]\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 9,
+      "time" : "Took: 2.403s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "DDE38FA647FF414088A8C7F22068AE04"
+    },
+    "cell_type" : "code",
+    "source" : "val ratingsDF_2 = ratingsDF_1.withColumn(\"movieId\", col(\"movieId\").cast(\"integer\")).select(\"userId\", \"movieId\", \"rating\", \"timestamp\")",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "ratingsDF_2: org.apache.spark.sql.DataFrame = [userId: int, movieId: int ... 2 more fields]\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 10,
+      "time" : "Took: 2.194s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "DE3098D8DDB84DA19E69AAE1DC658110"
+    },
+    "cell_type" : "code",
+    "source" : "val ratingsDF_3 = ratingsDF_2.withColumn(\"rating\", col(\"rating\").cast(\"double\")).select(\"userId\", \"movieId\", \"rating\", \"timestamp\")",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "ratingsDF_3: org.apache.spark.sql.DataFrame = [userId: int, movieId: int ... 2 more fields]\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 11,
+      "time" : "Took: 2.180s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "290AF4A9E72E436D8130EBAE77B71B4E"
+    },
+    "cell_type" : "code",
+    "source" : "val ratingsDF_4 = ratingsDF_3.withColumn(\"timestamp\", col(\"timestamp\").cast(\"long\")).select(\"userId\", \"movieId\", \"rating\", \"timestamp\")",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "ratingsDF_4: org.apache.spark.sql.DataFrame = [userId: int, movieId: int ... 2 more fields]\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 12,
+      "time" : "Took: 2.127s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "032DE1EEAAB6403E804879E6A968D506"
+    },
+    "cell_type" : "code",
+    "source" : "ratingsDF_4.printSchema",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "root\n |-- userId: integer (nullable = true)\n |-- movieId: integer (nullable = true)\n |-- rating: double (nullable = true)\n |-- timestamp: long (nullable = true)\n\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 13,
+      "time" : "Took: 2.627s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "3F3F034661724E239C3FF36829E3AADA"
+    },
+    "cell_type" : "code",
+    "source" : "import org.apache.spark.ml.evaluation.RegressionEvaluator",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "import org.apache.spark.ml.evaluation.RegressionEvaluator\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 14,
+      "time" : "Took: 1.920s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "22DB926FB18348B19CB21906F6222801"
+    },
+    "cell_type" : "code",
+    "source" : "import org.apache.spark.ml.recommendation.ALS",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "import org.apache.spark.ml.recommendation.ALS\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 15,
+      "time" : "Took: 1.721s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "575E7EDA6FBF4044BE155A59D928E419"
+    },
+    "cell_type" : "code",
+    "source" : "val splitRatings = ratingsDF_4.randomSplit(Array(0.75,0.25))",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "splitRatings: Array[org.apache.spark.sql.Dataset[org.apache.spark.sql.Row]] = Array([userId: int, movieId: int ... 2 more fields], [userId: int, movieId: int ... 2 more fields])\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 16,
+      "time" : "Took: 2.149s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "2768D278858F4DD39177170E912797F0"
+    },
+    "cell_type" : "code",
+    "source" : "val (training_data, test_data) = (splitRatings(0), splitRatings(1))",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "training_data: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [userId: int, movieId: int ... 2 more fields]\r\ntest_data: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [userId: int, movieId: int ... 2 more fields]\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 17,
+      "time" : "Took: 2.406s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "D93CFC91C39F4790AC03805520227644"
+    },
+    "cell_type" : "code",
+    "source" : "val als = new ALS()\n          .setMaxIter(10)\n          .setRegParam(0.01)\n          .setUserCol(\"userId\")\n          .setItemCol(\"movieId\")\n          .setRatingCol(\"rating\")",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "als: org.apache.spark.ml.recommendation.ALS = als_bc4c825288bf\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 18,
+      "time" : "Took: 2.176s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "49E4725E154D4A4A951CFC83F203F33C"
+    },
+    "cell_type" : "code",
+    "source" : "val model = als.fit(training_data)",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "model: org.apache.spark.ml.recommendation.ALSModel = als_bc4c825288bf\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 19,
+      "time" : "Took: 20.952s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "34E8C4C115294DAA9328DE5DBE35D92F"
+    },
+    "cell_type" : "code",
+    "source" : "model.setColdStartStrategy(\"drop\")\nval predictions = model.transform(test_data)",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "predictions: org.apache.spark.sql.DataFrame = [userId: int, movieId: int ... 3 more fields]\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 20,
+      "time" : "Took: 2.441s, at 2018-11-03 22:40"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "54D05BAAEF84460D8D374D208041F1B4"
+    },
+    "cell_type" : "code",
+    "source" : "val evaluator = new RegressionEvaluator()\n  .setMetricName(\"rmse\")\n  .setLabelCol(\"rating\")\n  .setPredictionCol(\"prediction\")\nval rmse = evaluator.evaluate(predictions)\nprintln(s\"Root-mean-square error = $rmse\")",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "Root-mean-square error = 1.154422554913712\nevaluator: org.apache.spark.ml.evaluation.RegressionEvaluator = regEval_95f8449c5a77\nrmse: Double = 1.154422554913712\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 21,
+      "time" : "Took: 51.921s, at 2018-11-03 22:41"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "61DFD4998F5044399F778D2E7202222B"
+    },
+    "cell_type" : "code",
+    "source" : "val userRecs = model.recommendForAllUsers(6)",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "userRecs: org.apache.spark.sql.DataFrame = [userId: int, recommendations: array<struct<movieId:int,rating:float>>]\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 22,
+      "time" : "Took: 3.956s, at 2018-11-03 22:41"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "C01A6E53B80741EEA30F043B36ADB8D7"
+    },
+    "cell_type" : "code",
+    "source" : "userRecs.show(2)",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "+------+--------------------+\n|userId|     recommendations|\n+------+--------------------+\n|   471|[[3040,11.677633]...|\n|   463|[[4235,6.0659475]...|\n+------+--------------------+\nonly showing top 2 rows\n\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 23,
+      "time" : "Took: 19.466s, at 2018-11-03 22:42"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "5D577BF179E74795B03918874B296B44"
+    },
+    "cell_type" : "code",
+    "source" : "val movieRecs = model.recommendForAllItems(6)",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "movieRecs: org.apache.spark.sql.DataFrame = [movieId: int, recommendations: array<struct<userId:int,rating:float>>]\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 24,
+      "time" : "Took: 2.787s, at 2018-11-03 22:42"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "DD2EBEC0280C418886799C925CF8311F"
+    },
+    "cell_type" : "code",
+    "source" : "movieRecs.show(2)",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "+-------+--------------------+\n|movieId|     recommendations|\n+-------+--------------------+\n|   1580|[[37,5.907696], [...|\n|   4900|[[259,7.4146643],...|\n+-------+--------------------+\nonly showing top 2 rows\n\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 25,
+      "time" : "Took: 41.792s, at 2018-11-03 22:42"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "C87159FC36E6434495615A5AFEE09A6B"
+    },
+    "cell_type" : "code",
+    "source" : "val uview = userRecs.createGlobalTempView(\"users\")",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "uview: Unit = ()\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 26,
+      "time" : "Took: 2.907s, at 2018-11-03 22:42"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "presentation" : {
+        "tabs_state" : "{\n  \"tab_id\": \"#tab2083640154-0\"\n}",
+        "pivot_chart_state" : "{\n  \"hiddenAttributes\": [],\n  \"menuLimit\": 200,\n  \"cols\": [],\n  \"rows\": [],\n  \"vals\": [],\n  \"exclusions\": {},\n  \"inclusions\": {},\n  \"unusedAttrsVertical\": 85,\n  \"autoSortUnusedAttrs\": false,\n  \"inclusionsInfo\": {},\n  \"aggregatorName\": \"Count\",\n  \"rendererName\": \"Table\"\n}"
+      },
+      "id" : "D45073186B954FF991CA4383487C8F92"
+    },
+    "cell_type" : "code",
+    "source" : "spark.sql(\"SELECT recommendations FROM global_temp.users where userId = 471\").show()\n\n",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "+--------------------+\n|     recommendations|\n+--------------------+\n|[[3040,11.677633]...|\n+--------------------+\n\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 27,
+      "time" : "Took: 7.064s, at 2018-11-03 22:43"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "A343388BFA804634891B83AD9CCB46A8"
+    },
+    "cell_type" : "code",
+    "source" : "val mview = movieRecs.createGlobalTempView(\"movies\")",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "mview: Unit = ()\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 28,
+      "time" : "Took: 2.119s, at 2018-11-03 22:43"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "F7E6D1D414DE4ECCBF55223638C94D86"
+    },
+    "cell_type" : "code",
+    "source" : "spark.sql(\"SELECT recommendations FROM global_temp.movies where movieId = 1580\").show()",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "+--------------------+\n|     recommendations|\n+--------------------+\n|[[37,5.907696], [...|\n+--------------------+\n\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 29,
+      "time" : "Took: 7.762s, at 2018-11-03 22:43"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false,
+      "id" : "78A61D892CEB44B0945A5A9EAE7EA68C"
+    },
+    "cell_type" : "code",
+    "source" : "",
+    "outputs" : [ {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 30,
+      "time" : "Took: 2.175s, at 2018-11-03 22:43"
+    } ]
+  } ],
+  "nbformat" : 4
+}
