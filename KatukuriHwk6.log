@@ -1,0 +1,153 @@
+Script started on Sat 27 Oct 2018 07:36:45 PM PDT
+]0;katukun@comet-06-48:~/hwk6[?1034h[katukun@comet-06-48 hwk6]$ spark-shell --master local[*] --driver-memory 120G
+2018-10-27 19:36:56 WARN  NativeCodeLoader:62 - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+Spark context Web UI available at http://comet-06-48.sdsc.edu:4040
+Spark context available as 'sc' (master = local[*], app id = local-1540694220817).
+Spark session available as 'spark'.
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 2.3.1
+      /_/
+         
+Using Scala version 2.11.8 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_60)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> val movies = sc.textFile("/home/katukun/hwk6/movies.dat")
+movies: org.apache.spark.rdd.RDD[String] = /home/katukun/hwk6/movies.dat MapPartitionsRDD[1] at textFile at <console>:24
+
+scala> :paste
+// Entering paste mode (ctrl-D to finish)
+
+def  movies_1(line: String) = {
+     val fields = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)", -1)
+     (fields(0), fields(1), fields(2))
+}
+val moviesRDD2 =  movies.map( movies_1 )
+val moviesRDD =  moviesRDD2.map(  r =>  (r._1.toInt,  r._2,  r._3 ))
+
+// Exiting paste mode, now interpreting.
+
+movies_1: (line: String)(String, String, String)
+moviesRDD2: org.apache.spark.rdd.RDD[(String, String, String)] = MapPartitionsRDD[2] at map at <console>:29
+moviesRDD: org.apache.spark.rdd.RDD[(Int, String, String)] = MapPartitionsRDD[3] at map at <console>:30
+
+scala> moviesRDD.count
+res0: Long = 58098
+
+scala> moviesRDD.take(10).foreach(println)
+(1,Toy Story (1995),Adventure|Animation|Children|Comedy|Fantasy)
+(2,Jumanji (1995),Adventure|Children|Fantasy)
+(3,Grumpier Old Men (1995),Comedy|Romance)
+(4,Waiting to Exhale (1995),Comedy|Drama|Romance)
+(5,Father of the Bride Part II (1995),Comedy)
+(6,Heat (1995),Action|Crime|Thriller)
+(7,Sabrina (1995),Comedy|Romance)
+(8,Tom and Huck (1995),Adventure|Children)
+(9,Sudden Death (1995),Action)
+(10,GoldenEye (1995),Action|Adventure|Thriller)
+
+scala> val ratings = sc.textFile("/home/katukun/hwk6/ratings.dat")
+ratings: org.apache.spark.rdd.RDD[String] = /home/katukun/hwk6/ratings.dat MapPartitionsRDD[5] at textFile at <console>:24
+
+scala> val ratingsRDD = ratings.map(o => (o.split(",")(0).toInt, o.split(",")(1).toInt, o.split(",") (2).toDouble))
+ratingsRDD: org.apache.spark.rdd.RDD[(Int, Int, Double)] = MapPartitionsRDD[6] at map at <console>:25
+
+scala> moviesRDD.cache
+res2: moviesRDD.type = MapPartitionsRDD[3] at map at <console>:30
+
+scala> ratingsRDD.cache
+res3: ratingsRDD.type = MapPartitionsRDD[6] at map at <console>:25
+
+scala> val thrillerRDD = moviesRDD.filter(o => o._3.contains("Thriller"))
+thrillerRDD: org.apache.spark.rdd.RDD[(Int, String, String)] = MapPartitionsRDD[7] at filter at <console>:25
+
+scala> thrillerRDD.take(10).foreach(println)
+(6,Heat (1995),Action|Crime|Thriller)
+(10,GoldenEye (1995),Action|Adventure|Thriller)
+(20,Money Train (1995),Action|Comedy|Crime|Drama|Thriller)
+(21,Get Shorty (1995),Comedy|Crime|Thriller)
+(22,Copycat (1995),Crime|Drama|Horror|Mystery|Thriller)
+(23,Assassins (1995),Action|Crime|Thriller)
+(32,Twelve Monkeys (a.k.a. 12 Monkeys) (1995),Mystery|Sci-Fi|Thriller)
+(45,To Die For (1995),Comedy|Drama|Thriller)
+(47,Seven (a.k.a. Se7en) (1995),Mystery|Thriller)
+(50,"Usual Suspects, The (1995)",Crime|Mystery|Thriller)
+
+scala> val dramaRDD = moviesRDD.filter(o => o._3.contains("Drama"))
+dramaRDD: org.apache.spark.rdd.RDD[(Int, String, String)] = MapPartitionsRDD[8] at filter at <console>:25
+
+scala> dramaRDD.take(10).foreach(println)
+(4,Waiting to Exhale (1995),Comedy|Drama|Romance)
+(11,"American President, The (1995)",Comedy|Drama|Romance)
+(14,Nixon (1995),Drama)
+(16,Casino (1995),Crime|Drama)
+(17,Sense and Sensibility (1995),Drama|Romance)
+(20,Money Train (1995),Action|Comedy|Crime|Drama|Thriller)
+(22,Copycat (1995),Crime|Drama|Horror|Mystery|Thriller)
+(24,Powder (1995),Drama|Sci-Fi)
+(25,Leaving Las Vegas (1995),Drama|Romance)
+(26,Othello (1995),Drama)
+
+scala> val thrillerNotDrama_set = thrillerRDD.map(oi => (oi,1)).
+     |     leftOuterJoin(dramaRDD.map(oi => (oi, 1))).
+     |     filter(oi => oi._2._2 == None).
+     |     map(oi => oi._1)
+thrillerNotDrama_set: org.apache.spark.rdd.RDD[(Int, String, String)] = MapPartitionsRDD[15] at map at <console>:30
+
+scala> val thrillerNotDrama = moviesRDD.filter(o => {
+     |   o._3.contains("Thriller") && !(o._3.contains("Drama"))
+     | })
+thrillerNotDrama: org.apache.spark.rdd.RDD[(Int, String, String)] = MapPartitionsRDD[16] at filter at <console>:25
+
+scala> thrillerNotDrama.count
+res6: Long = 4868
+
+scala> thrillerNotDrama_set.count
+res7: Long = 4868
+
+scala> val filterRating = ratingsRDD.filter(o => o._3 == 2)
+filterRating: org.apache.spark.rdd.RDD[(Int, Int, Double)] = MapPartitionsRDD[17] at filter at <console>:25
+
+scala> val filterPairRDD = filterRating.map(o => (o._2, 1))
+filterPairRDD: org.apache.spark.rdd.RDD[(Int, Int)] = MapPartitionsRDD[18] at map at <console>:25
+
+scala> val reducedRDD = filterPairRDD.reduceByKey((o, i) => o + i)
+reducedRDD: org.apache.spark.rdd.RDD[(Int, Int)] = ShuffledRDD[19] at reduceByKey at <console>:25
+
+scala> val filterReduceRDD = reducedRDD.filter(o => o._2 > 100)
+filterReduceRDD: org.apache.spark.rdd.RDD[(Int, Int)] = MapPartitionsRDD[20] at filter at <console>:25
+
+scala> val movieTitleRDD = moviesRDD.map(o => (o._1, o._2))
+movieTitleRDD: org.apache.spark.rdd.RDD[(Int, String)] = MapPartitionsRDD[21] at map at <console>:25
+
+scala> val joinRDD = filterReduceRDD.join(movieTitleRDD)
+joinRDD: org.apache.spark.rdd.RDD[(Int, (Int, String))] = MapPartitionsRDD[24] at join at <console>:27
+
+scala> joinRDD.take(10).foreach(println)
+[Stage 8:>                                                        (0 + 23) / 23][Stage 8:==>                                                      (1 + 22) / 23][Stage 8:=========>                                               (4 + 19) / 23]                                                                                (667,(215,Bloodsport 2 (a.k.a. Bloodsport II: The Next Kumite) (1996)))
+(3197,(179,"Presidio, The (1988)"))
+(2346,(261,"Stepford Wives, The (1975)"))
+(460,(213,Getting Even with Dad (1994)))
+(5796,(128,Casino Royale (1967)))
+(47518,(157,Accepted (2006)))
+(54648,(161,Rush Hour 3 (2007)))
+(3910,(214,Dancer in the Dark (2000)))
+(1035,(897,"Sound of Music, The (1965)"))
+(2875,(366,Sommersby (1993)))
+
+scala> joinRDD.count
+res9: Long = 3371
+
+scala> :q
+]0;katukun@comet-06-48:~/hwk6[katukun@comet-06-48 hwk6]$ squeu -  e -u katukun
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          19849907   compute     bash  katukun  R      15:47      1 comet-06-48
+]0;katukun@comet-06-48:~/hwk6[katukun@comet-06-48 hwk6]$ exit
+exit
+
+Script done on Sat 27 Oct 2018 07:39:56 PM PDT
